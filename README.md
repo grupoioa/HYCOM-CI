@@ -1,5 +1,5 @@
 ## Repositorio de Hycom Team (2025) para Condiciones iniciales de Pronóstico HYCOM-IOA
-- [Hycom Team](https://github.com/grupoioa/hycom-team)
+- [Hycom Team](https://github.com/orgs/grupoioa/teams/hycom-team)
 
 ## Documentación
 
