@@ -21,6 +21,9 @@ ANIO_FIN=$(date +%Y --date='4 day')
 MES_FIN=$(date +%m --date='4 day')
 DIA_FIN=$(date +%d --date='4 day')
 HORA_FIN=00
+# Formato de fechas HYCOM
+P_YEAR="$(date +%y | sed 's/^/0/')"
+DAYS_SINCE_JAN_1="$(date +%j)"
 
 export fecha_ini=$ANIO_INI"-"$MES_INI"-"$DIA_INI"_"$HORA_INI
 export fecha_fin=$ANIO_FIN"-"$MES_FIN"-"$DIA_FIN"_"$HORA_FIN
@@ -28,12 +31,17 @@ export fecha_fin=$ANIO_FIN"-"$MES_FIN"-"$DIA_FIN"_"$HORA_FIN
 echo $fecha_ini $fecha_fin
 python dias_jul.py $fecha_inicio $fecha_final
 # 000y0250126012.limits
-mv limits 000y0250126012.limits
+#mv limits 000y0250126012.limits
+NOMBRE_ARCHIVO_LIMITS="000y${P_YEAR}0${DAYS_SINCE_JAN_1}012.limits"
+LIMITS=$(echo $NOMBRE_ARCHIVO_LIMITS | cut -d '.' -f 1)
+mv limits $NOMBRE_ARCHIVO_LIMITS
 
-# exit 1
+echo "SIGUIENTE ETAPA. CORRER MODELO"
+exit 1
 # Ambiente de ejecuci'on
 ml load herramientas/python/latest
-python force2ab_operativo.py $fecha_ini 025 0126012
+#python force2ab_operativo.py $fecha_ini $P_YEAR "0${DAYS_SINCE_JAN_1}012" > 000y0250126012
+python force2ab_operativo.py $fecha_ini $P_YEAR "0${DAYS_SINCE_JAN_1}012" > $LIMITS
 
 # Crear restart
 cd $MODELO_HYCOM/restart/000
