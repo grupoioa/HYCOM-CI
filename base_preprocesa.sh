@@ -9,32 +9,24 @@ set -u
 # 1. Crea forzamientos
 # 2. Crea archivo limits con la fecha en dias julianos 
 MODELO_HYCOM=/LUSTRE/OPERATIVO/OPERATIVO2/modelos/HYCOM
-cd $MODELO_HYCOM/expt_00.0
+#cd $MODELO_HYCOM/expt_00.0
 
-# Fecha actual de inicio de simulacion
-ANIO_INI=$(date +%Y)
-MES_INI=$(date +%m)
-DIA_INI=$(date +%d)
-HORA_INI=12
-# Fecha de termino de simulacion (HYCOM)
-ANIO_FIN=$(date +%Y --date='4 day')
-MES_FIN=$(date +%m --date='4 day')
-DIA_FIN=$(date +%d --date='4 day')
-HORA_FIN=00
-# Formato de fechas HYCOM
-P_YEAR="$(date +%y | sed 's/^/0/')"
-DAYS_SINCE_JAN_1="$(date +%j)"
+# Fecha actual como inicio de simulacion
+ANIO=$(date +%Y)
+MES=$(date +%m)
+DIA=$(date +%d)
+HORA=12
+# horas de simulación
+HORAS=84
 
-export fecha_ini=$ANIO_INI"-"$MES_INI"-"$DIA_INI"_"$HORA_INI
-export fecha_fin=$ANIO_FIN"-"$MES_FIN"-"$DIA_FIN"_"$HORA_FIN
+python fmt_fechas.py "$ANIO"-"$MES"-"$DIA"_"$HORA" $HORAS
+
+# carga .env con variables creadas
+set -a
+source .env
+set +a
 
 echo $fecha_ini $fecha_fin
-python dias_jul.py $fecha_inicio $fecha_final
-# 000y0250126012.limits
-#mv limits 000y0250126012.limits
-NOMBRE_ARCHIVO_LIMITS="000y${P_YEAR}0${DAYS_SINCE_JAN_1}012.limits"
-LIMITS=$(echo $NOMBRE_ARCHIVO_LIMITS | cut -d '.' -f 1)
-mv limits $NOMBRE_ARCHIVO_LIMITS
 
 echo "SIGUIENTE ETAPA. CORRER MODELO"
 exit 1
